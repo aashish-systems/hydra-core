@@ -1,0 +1,46 @@
+{
+    "LLM_Inference": {
+        "gpu": "NVIDIA H100",
+        "recommended_pcm": "Composite Graphite PCM",
+        "optimal_pcm_thickness_mm": 0.1,
+        "optimal_melting_temp_c": 65.0,
+        "peak_junction_temp_c": 78.9,
+        "thermal_uniformity_index_c": 3.68,
+        "thermal_buffer_utilization_pct": 90.0,
+        "estimated_burst_endurance_s": 46,
+        "fatigue_lifetime_multiplier": 4.4
+    },
+    "LLM_Training": {
+        "gpu": "NVIDIA H100",
+        "recommended_pcm": "Composite Graphite PCM",
+        "optimal_pcm_thickness_mm": 0.1,
+        "optimal_melting_temp_c": 65.0,
+        "peak_junction_temp_c": 78.9,
+        "thermal_uniformity_index_c": 3.68,
+        "thermal_buffer_utilization_pct": 90.0,
+        "estimated_burst_endurance_s": 46,
+        "fatigue_lifetime_multiplier": 4.4
+    },
+    "CNN_Inference": {
+        "gpu": "NVIDIA H100",
+        "recommended_pcm": "Composite Graphite PCM",
+        "optimal_pcm_thickness_mm": 0.1,
+        "optimal_melting_temp_c": 65.0,
+        "peak_junction_temp_c": 78.9,
+        "thermal_uniformity_index_c": 3.68,
+        "thermal_buffer_utilization_pct": 90.0,
+        "estimated_burst_endurance_s": 46,
+        "fatigue_lifetime_multiplier": 4.4
+    },
+    "Mixed_Cloud_AI": {
+        "gpu": "NVIDIA H100",
+        "recommended_pcm": "Composite Graphite PCM",
+        "optimal_pcm_thickness_mm": 0.1,
+        "optimal_melting_temp_c": 65.0,
+        "peak_junction_temp_c": 78.9,
+        "thermal_uniformity_index_c": 3.68,
+        "thermal_buffer_utilization_pct": 90.0,
+        "estimated_burst_endurance_s": 46,
+        "fatigue_lifetime_multiplier": 4.4
+    }
+}

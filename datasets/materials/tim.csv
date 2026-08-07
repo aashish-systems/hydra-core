@@ -1,0 +1,4 @@
+name,type,thickness_m,thermal_conductivity_W_mK,density_kg_m3,specific_heat_J_kgK
+Standard_Silicone_Paste,Paste,0.0001,3.5,2200,600
+Metallic_PCM_TIM,Metallic,0.0001,8.5,2500,500
+Liquid_Metal_TIM,LiquidMetal,0.00005,40.0,6200,300

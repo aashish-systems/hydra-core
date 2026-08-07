@@ -1,0 +1,4 @@
+name,type,thermal_conductivity_W_mK,density_kg_m3,specific_heat_J_kgK
+Copper_Spreader,Metal,400,8960,385
+Aluminum_Spreader,Metal,205,2700,900
+Diamond_Composite_Spreader,Composite,1200,3500,500

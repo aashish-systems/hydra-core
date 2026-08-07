@@ -1,0 +1,5 @@
+Workload,GPU,Thickness_mm,Tm_degC,Peak_Temp_degC,TUI_degC,TBU_pct,Burst_Endurance_s,Lifetime_Multiplier
+LLM_Inference,NVIDIA H100,0.2,65.0,79.6,3.8,78.0,45,3.78
+LLM_Training,NVIDIA H100,0.2,65.0,79.6,3.8,78.0,45,3.78
+CNN_Inference,NVIDIA H100,0.2,65.0,79.6,3.8,78.0,45,3.78
+Mixed_Cloud_AI,NVIDIA H100,0.2,65.0,79.6,3.8,78.0,45,3.78

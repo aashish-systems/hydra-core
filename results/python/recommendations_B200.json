@@ -1,0 +1,46 @@
+{
+    "LLM_Inference": {
+        "gpu": "NVIDIA B200",
+        "recommended_pcm": "Composite Graphite PCM",
+        "optimal_pcm_thickness_mm": 0.2,
+        "optimal_melting_temp_c": 65.0,
+        "peak_junction_temp_c": 79.6,
+        "thermal_uniformity_index_c": 3.8,
+        "thermal_buffer_utilization_pct": 78.0,
+        "estimated_burst_endurance_s": 45,
+        "fatigue_lifetime_multiplier": 3.78
+    },
+    "LLM_Training": {
+        "gpu": "NVIDIA B200",
+        "recommended_pcm": "Composite Graphite PCM",
+        "optimal_pcm_thickness_mm": 0.2,
+        "optimal_melting_temp_c": 65.0,
+        "peak_junction_temp_c": 79.6,
+        "thermal_uniformity_index_c": 3.8,
+        "thermal_buffer_utilization_pct": 78.0,
+        "estimated_burst_endurance_s": 45,
+        "fatigue_lifetime_multiplier": 3.78
+    },
+    "CNN_Inference": {
+        "gpu": "NVIDIA B200",
+        "recommended_pcm": "Composite Graphite PCM",
+        "optimal_pcm_thickness_mm": 0.2,
+        "optimal_melting_temp_c": 65.0,
+        "peak_junction_temp_c": 79.6,
+        "thermal_uniformity_index_c": 3.8,
+        "thermal_buffer_utilization_pct": 78.0,
+        "estimated_burst_endurance_s": 45,
+        "fatigue_lifetime_multiplier": 3.78
+    },
+    "Mixed_Cloud_AI": {
+        "gpu": "NVIDIA B200",
+        "recommended_pcm": "Composite Graphite PCM",
+        "optimal_pcm_thickness_mm": 0.2,
+        "optimal_melting_temp_c": 65.0,
+        "peak_junction_temp_c": 79.6,
+        "thermal_uniformity_index_c": 3.8,
+        "thermal_buffer_utilization_pct": 78.0,
+        "estimated_burst_endurance_s": 45,
+        "fatigue_lifetime_multiplier": 3.78
+    }
+}

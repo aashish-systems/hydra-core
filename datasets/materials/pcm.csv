@@ -1,0 +1,5 @@
+name,type,latent_heat_J_kg,density_kg_m3,k_solid_W_mK,k_liquid_W_mK,cp_solid_J_kgK,cp_liquid_J_kgK
+Organic_Paraffin,Organic,200000,800,0.2,0.15,2000,2200
+Composite_Graphite_PCM,Composite,220000,850,8.0,7.5,2200,2400
+Metallic_PCM_Eutectic,Metallic,180000,6500,25.0,22.0,300,350
+HighK_Nanocomposite_PCM,Composite,240000,900,14.5,13.0,2300,2500
