@@ -1,0 +1,50 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2312                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 308.15; // 35°C Initial idle temperature (308.15 K)
+
+boundaryField
+{
+    topCoolant
+    {
+        type            externalWallHeatFluxTemperature;
+        mode            coefficient;
+        h               uniform 35000;
+        Ta              uniform 298.15; // 25°C Coolant temperature
+        kappaMethod     fluidSolidComplex;
+        value           uniform 308.15;
+    }
+
+    bottomDie
+    {
+        type            zeroGradient; // Insulated bottom
+    }
+
+    sides
+    {
+        type            zeroGradient; // Insulated sides
+    }
+
+    frontAndBack
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //

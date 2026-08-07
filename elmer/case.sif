@@ -1,0 +1,142 @@
+!------------------------------------------------------------------------------
+! ELMER FEM SOLVER INPUT FILE (case.sif)
+! Transient Heat Transfer in GPU Package with Phase Change Material Buffer
+!------------------------------------------------------------------------------
+
+Header
+  CHECK KEYWORDS Warn
+  Mesh DB "." "elmer_mesh"
+  Include Path ""
+  Results Directory "results"
+End
+
+Simulation
+  Max Output Level = 5
+  Coordinate System = Cartesian
+  Coordinate Mapping(3) = 1 2 3
+  Simulation Type = Transient
+  Steady State Max Iterations = 1
+  Output Intervals = 1
+  Timestepping Method = BDF
+  BDF Order = 2
+  Timestep Intervals = 1200
+  Timestep Sizes = 0.05
+  Output File = "case.result"
+End
+
+Constants
+  Gravity(4) = 0 -1 0 9.82
+  Stefan Boltzmann = 5.67e-08
+  Permittivity of Vacuum = 8.8542e-12
+  Boltzmann Constant = 1.3807e-23
+  Unit Charge = 1.602e-19
+End
+
+Body 1
+  Target Bodies(1) = 1
+  Name = "GPU_Die"
+  Equation = 1
+  Material = 1
+  Body Force = 1
+End
+
+Body 2
+  Target Bodies(1) = 2
+  Name = "TIM_Layer"
+  Equation = 1
+  Material = 2
+End
+
+Body 3
+  Target Bodies(1) = 3
+  Name = "PCM_Buffer"
+  Equation = 1
+  Material = 3
+End
+
+Body 4
+  Target Bodies(1) = 4
+  Name = "Cold_Plate"
+  Equation = 1
+  Material = 4
+End
+
+Equation 1
+  Name = "Heat_Conduction"
+  Active Solvers(1) = 1
+End
+
+Solver 1
+  Equation = Heat Solver
+  Variable = Temperature
+  Procedure = "HeatSolve" "HeatSolver"
+  Exec Solver = Always
+  Stabilize = True
+  Bubbles = False
+  Lumped Mass Matrix = False
+  Optimize Bandwidth = True
+  Steady State Convergence Tolerance = 1.0e-5
+  Nonlinear System Convergence Tolerance = 1.0e-5
+  Nonlinear System Max Iterations = 20
+  Nonlinear System Newton After Iterations = 3
+  Nonlinear System Newton After Tolerance = 1.0e-3
+  Nonlinear System Relaxation Factor = 1
+  Linear System Solver = Iterative
+  Linear System Iterative Method = BiCGStab
+  Linear System Max Iterations = 500
+  Linear System Convergence Tolerance = 1.0e-8
+  Linear System Preconditioning = ILU0
+  Linear System ILUT Tolerance = 1.0e-3
+  Linear System Abort Not Converged = False
+  Linear System Residual Output = 10
+  Linear System Precondition Recompute = 1
+End
+
+Material 1
+  Name = "Silicon_GPU"
+  Density = 2330.0
+  Heat Capacity = 700.0
+  Heat Conductivity = 130.0
+End
+
+Material 2
+  Name = "TIM_Layer"
+  Density = 2500.0
+  Heat Capacity = 500.0
+  Heat Conductivity = 15.0
+End
+
+Material 3
+  Name = "Composite_PCM_Matrix"
+  Density = 1200.0
+  Heat Capacity = 1800.0
+  Heat Conductivity = 110.0
+  Phase Change Model = Spatial Temperature
+  Enthalpy = 220000.0
+  Phase Change Intervals = 64.0 66.0
+End
+
+Material 4
+  Name = "Copper_ColdPlate"
+  Density = 8960.0
+  Heat Capacity = 385.0
+  Heat Conductivity = 400.0
+End
+
+Body Force 1
+  Name = "Die_Volumetric_Heat_Source"
+  Heat Source = 2.12e9 ! W/m^3 Hotspot Peak Flux Density
+End
+
+Boundary Condition 1
+  Target Boundaries(1) = 1
+  Name = "Microchannel_Coolant_Convection"
+  Heat Transfer Coefficient = 35000.0
+  External Temperature = 25.0
+End
+
+Boundary Condition 2
+  Target Boundaries(1) = 2
+  Name = "Insulated_Package_Boundaries"
+  Heat Flux = 0.0
+End

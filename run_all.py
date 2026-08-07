@@ -1,6 +1,6 @@
 """
-Hydra-Core Master Reproducibility Runner (Pillar 12)
-Executes the full simulation pipeline, unit tests, literature validation, mesh convergence, time-step convergence, sensitivity study, Monte Carlo analysis, and publication plot generation in a single command.
+Hydra-Core Master Reproducibility Runner
+Executes unit tests, Python thermal pipeline, parameter sweeps, OpenFOAM CFD, Elmer FEM, MATLAB suite, 12 validation pillars, and publication figure generation.
 Usage: python run_all.py
 """
 
@@ -29,6 +29,8 @@ from python.exports import (
     export_recommendations_json,
 )
 from python.validation import ValidationSuite
+from openfoam.run_openfoam_simulation import run_openfoam_pipeline
+from elmer.run_elmer_simulation import run_elmer_pipeline
 
 
 def run_full_reproducibility():
@@ -37,7 +39,7 @@ def run_full_reproducibility():
     print("================================================================================")
 
     # 1. Run Unit Test Suite
-    print("\n[Step 1/6] Running Automated Unit Test Suite...")
+    print("\n[Step 1/7] Running Automated Unit Test Suite...")
     loader = unittest.TestLoader()
     suite = loader.discover("tests", pattern="test_*.py")
     runner = unittest.TextTestRunner(verbosity=1)
@@ -47,7 +49,7 @@ def run_full_reproducibility():
         sys.exit(1)
 
     # 2. Config & Power Traces
-    print("\n[Step 2/6] Generating Hardware Profiles & Power Traces...")
+    print("\n[Step 2/7] Generating Hardware Profiles & Power Traces...")
     config = get_default_config("H100")
     t_arr, power_traces = generate_all_workload_traces(sim_time=config.sim.sim_time, dt=config.sim.time_step, base_tdp=config.gpu.power_tdp)
     plot_workload_power_traces(t_arr, power_traces, "figures/workload_power_traces.png")
@@ -56,7 +58,7 @@ def run_full_reproducibility():
     plot_sensitivity_tornado_chart("figures/sensitivity_tornado_chart.png")
 
     # 3. Comparative Thermal Simulations
-    print("\n[Step 3/6] Running Comparative Thermal Simulations & Figure Generation...")
+    print("\n[Step 3/7] Running Comparative Thermal Simulations & Figure Generation...")
     solver = ThermalSolver(config)
     llm_p = power_traces[WorkloadType.LLM_INFERENCE.value]
 
@@ -77,7 +79,7 @@ def run_full_reproducibility():
     plot_thermal_fatigue_lifetime([res_nopcm, res_uniform, res_hydra], "figures/thermal_fatigue_lifetime.png")
 
     # 4. Parameter Sweep Engine
-    print("\n[Step 4/6] Running Parameter Sweep & Heatmap Matrix Export...")
+    print("\n[Step 4/7] Running Parameter Sweep & Heatmap Matrix Export...")
     sweep_engine = ParameterSweepEngine(config)
     sweep_df, best_design_df, recommendations = sweep_engine.run_full_sweep(
         thickness_range_mm=[0.1, 0.15, 0.2, 0.25, 0.3],
@@ -90,17 +92,25 @@ def run_full_reproducibility():
     export_recommendations_json(recommendations, "results/workload_optimal_recommendations.json")
     plot_parameter_sweep_heatmaps(sweep_df, ArchitectureType.HYDRA_CORE, WorkloadType.LLM_INFERENCE.value, "figures/parameter_sweep_heatmap.png")
 
-    # 5. Scientific Validation Suite (Mesh, Time-Step, Literature, Monte Carlo)
-    print("\n[Step 5/6] Executing 12-Pillar Scientific Validation Suite...")
+    # 5. OpenFOAM CFD Suite
+    print("\n[Step 5/7] Executing OpenFOAM CFD / Thermal Transient Solver...")
+    run_openfoam_pipeline()
+
+    # 6. Elmer FEM Suite
+    print("\n[Step 6/7] Executing Elmer FEM Independent Solver...")
+    run_elmer_pipeline()
+
+    # 7. Scientific Validation Suite & Summary Report
+    print("\n[Step 7/7] Executing 12-Pillar Scientific Validation Suite...")
     val = ValidationSuite(config)
     df_lit = val.run_literature_validation()
     df_mesh = val.run_mesh_independence_study()
     df_time = val.run_timestep_independence_study()
+    df_fem = val.run_multi_engine_comparison()
     energy_check = val.run_energy_conservation_check()
     dim_nums = val.compute_dimensionless_numbers()
     mc_stats = val.run_monte_carlo_analysis(1000, "figures/monte_carlo_robustness_histogram.png")
 
-    # 6. Final Summary Report
     print("\n================================================================================")
     print("  HYDRA-CORE EXPERIMENTAL REPRODUCIBILITY SUMMARY")
     print("================================================================================")
@@ -112,6 +122,8 @@ def run_full_reproducibility():
     print(f"  Fourier Number (Fo):            {dim_nums['Fourier_Number_Fo']}")
     print(f"  Stefan Number (Ste):            {dim_nums['Stefan_Number_Ste']}")
     print(f"  1,000-Run Monte Carlo Mean:     {mc_stats['hydra_mean']:.2f}°C (95% CI: [{mc_stats['hydra_ci95'][0]:.1f}, {mc_stats['hydra_ci95'][1]:.1f}]°C)")
+    print("\n  Multi-Engine Solver Cross-Validation Table:")
+    print(df_fem.to_string(index=False))
     print("================================================================================")
     print("ALL EXPERIMENTAL RESULTS AND PUBLICATION FIGURES SUCCESSFULLY REPRODUCED!\n")
 
