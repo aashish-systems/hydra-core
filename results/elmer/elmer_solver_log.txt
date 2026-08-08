@@ -1,0 +1,91 @@
+ELMER SOLVER (v 26.2) STARTED AT: 2026/08/08 08:48:24
+ParCommInit: Initialize #PEs: 1
+MAIN: OMP_NUM_THREADS not set. Using only 1 thread per task.
+MAIN: 
+MAIN: =============================================================
+MAIN: ElmerSolver finite element software, Welcome!
+MAIN: This program is free software licensed under (L)GPL
+MAIN: Copyright 1st April 1995 - , CSC - IT Center for Science Ltd.
+MAIN: Webpage http://www.csc.fi/elmer, Email elmeradm@csc.fi
+MAIN: Version: 26.2-unknown (Rev: unknown, Compiled: 2026-07-30)
+MAIN:  Running one task without MPI parallelization.
+MAIN:  Running with just one thread per task.
+MAIN:  Lua interpreter linked in.
+MAIN: =============================================================
+MAIN: 
+MAIN: 
+MAIN: -------------------------------------
+MAIN: Reading Model: case.sif
+ Caught LUA error:[string "loadfile("/ucrt64/share/elmersolver" .. "/l..."]:1: attempt to call a nil value
+ Caught LUA error:[string "loadstring(readsif("case.sif"))()"]:1: attempt to call global 'readsif' (a nil value)
+LoadInputFile: Scanning input file: case.sif
+LoadInputFile: Scanning only size info
+LoadInputFile: First time visiting
+LoadInputFile: Reading base load of sif file
+LoadInputFile: Loading input file: case.sif
+LoadInputFile: Reading base load of sif file
+LoadInputFile: Number of BCs: 4
+LoadInputFile: Number of Body Forces: 1
+LoadInputFile: Number of Initial Conditions: 0
+LoadInputFile: Number of Materials: 4
+LoadInputFile: Number of Equations: 1
+LoadInputFile: Number of Solvers: 1
+LoadInputFile: Number of Bodies: 4
+ElmerMeshReader: Base mesh name: ./elmer_mesh
+LoadMesh: Elapsed REAL time:     0.1360 (s)
+MAIN: -------------------------------------
+AddVtuOutputSolverHack: Adding ResultOutputSolver to write VTU output in file: case
+OptimizeBandwidth: Initial bandwidth for heat equation: 67
+OptimizeBandwidth: Optimized bandwidth for heat equation: 55
+MAIN: Number of timesteps to be saved: 1
+MAIN: 
+MAIN: -------------------------------------
+MAIN:  Steady state iteration:            1
+MAIN: -------------------------------------
+MAIN: 
+HeatSolver: Solving the energy equation for temperature
+HeatSolve: 
+HeatSolve: 
+HeatSolve: -------------------------------------
+HeatSolve:  TEMPERATURE ITERATION           1
+HeatSolve: -------------------------------------
+HeatSolve: 
+HeatSolve: Starting Assembly...
+HeatSolve: Assembly:
+HeatSolve: Assembly done
+BiCGStabl:       18 0.3391E-08 0.3391E-08
+ComputeChange: NS (ITER=1) (NRM,RELC): (  49.039511      2.0000000     ) :: heat equation
+HeatSolve: iter:    1 Assembly: (s)    0.02    0.02
+HeatSolve: iter:    1 Solve:    (s)    0.02    0.02
+HeatSolve:  Result Norm   :    49.039510847702019
+HeatSolve:  Relative Change :    2.0000000000000000
+HeatSolve: 
+HeatSolve: 
+HeatSolve: -------------------------------------
+HeatSolve:  TEMPERATURE ITERATION           2
+HeatSolve: -------------------------------------
+HeatSolve: 
+HeatSolve: Starting Assembly...
+HeatSolve: Assembly:
+HeatSolve: Assembly done
+ComputeChange: NS (ITER=2) (NRM,RELC): (  49.039511      0.0000000     ) :: heat equation
+HeatSolve: iter:    2 Assembly: (s)    0.02    0.05
+HeatSolve: iter:    2 Solve:    (s)    0.00    0.02
+HeatSolve:  Result Norm   :    49.039510847702019
+HeatSolve:  Relative Change :    0.0000000000000000
+ComputeChange: SS (ITER=1) (NRM,RELC): (  49.039511      2.0000000     ) :: heat equation
+SaveResult: -----------------------------------------
+SaveResult: Saving results to file: elmer_mesh/case.result
+SaveResult: Done writing results file
+SaveResult: -----------------------------------------
+ResultOutputSolver: -------------------------------------
+ResultOutputSolver: Saving with prefix: case
+CreateListForSaving: Field Variables for Saving
+ResultOutputSolver: Saving in unstructured VTK XML (.vtu) format
+VtuOutputSolver: Saving results in VTK XML format with prefix: case
+VtuOutputSolver: Saving number of partitions: 1
+ResultOutputSolver: -------------------------------------
+MAIN: *** Elmer Solver: ALL DONE ***
+MAIN: The end
+SOLVER TOTAL TIME(CPU,REAL):         0.59        0.59
+ELMER SOLVER FINISHED AT: 2026/08/08 08:48:25

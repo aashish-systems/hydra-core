@@ -1,0 +1,4 @@
+Engine,Method,Peak_Temp_degC,Source
+Python Hydra-Core,Implicit 2D FDM (700W Steady),55.57,Native FDM
+Elmer FEM,2D Steady-State FEM (700W),53.52,ElmerSolver Native (2D FEM)
+Deviation / Error,|FDM - FEM| Delta,2.05,Delta = 2.05 degC (< 0.8 degC Target)

@@ -1,36 +1,33 @@
 !------------------------------------------------------------------------------
 ! ELMER FEM SOLVER INPUT FILE (case.sif)
-! Transient Heat Transfer in GPU Package with Phase Change Material Buffer
+! Hydra-Core: Steady-State Heat Transfer in GPU Package
+! 4-Layer Stack: GPU Die | TIM | PCM Buffer | Cold Plate
+! Heat Source: 700W over die area (volumetric)
+! Cooling: Microchannel convection h = 35000 W/m^2*K at top
 !------------------------------------------------------------------------------
 
 Header
   CHECK KEYWORDS Warn
   Mesh DB "." "elmer_mesh"
   Include Path ""
-  Results Directory "results"
+  Results Directory "elmer_results"
 End
 
 Simulation
   Max Output Level = 5
-  Coordinate System = Cartesian
+  Coordinate System = Cartesian 2D
   Coordinate Mapping(3) = 1 2 3
-  Simulation Type = Transient
+  Simulation Type = Steady state
   Steady State Max Iterations = 1
-  Output Intervals = 1
-  Timestepping Method = BDF
-  BDF Order = 2
-  Timestep Intervals = 1200
-  Timestep Sizes = 0.05
   Output File = "case.result"
+  Post File = "case.vtu"
 End
 
 Constants
-  Gravity(4) = 0 -1 0 9.82
   Stefan Boltzmann = 5.67e-08
-  Permittivity of Vacuum = 8.8542e-12
-  Boltzmann Constant = 1.3807e-23
-  Unit Charge = 1.602e-19
 End
+
+!--- Bodies (4 layers) ---
 
 Body 1
   Target Bodies(1) = 1
@@ -61,82 +58,105 @@ Body 4
   Material = 4
 End
 
+!--- Equation ---
+
 Equation 1
-  Name = "Heat_Conduction"
+  Name = "Heat_Equation"
   Active Solvers(1) = 1
 End
 
+!--- Solver: HeatSolve ---
+
 Solver 1
-  Equation = Heat Solver
+  Equation = Heat Equation
   Variable = Temperature
   Procedure = "HeatSolve" "HeatSolver"
   Exec Solver = Always
   Stabilize = True
-  Bubbles = False
-  Lumped Mass Matrix = False
   Optimize Bandwidth = True
-  Steady State Convergence Tolerance = 1.0e-5
-  Nonlinear System Convergence Tolerance = 1.0e-5
-  Nonlinear System Max Iterations = 20
+  Steady State Convergence Tolerance = 1.0e-6
+  Nonlinear System Convergence Tolerance = 1.0e-6
+  Nonlinear System Max Iterations = 30
   Nonlinear System Newton After Iterations = 3
   Nonlinear System Newton After Tolerance = 1.0e-3
-  Nonlinear System Relaxation Factor = 1
+  Nonlinear System Relaxation Factor = 1.0
   Linear System Solver = Iterative
-  Linear System Iterative Method = BiCGStab
-  Linear System Max Iterations = 500
+  Linear System Iterative Method = BiCGStabl
+  Linear System Max Iterations = 1000
   Linear System Convergence Tolerance = 1.0e-8
-  Linear System Preconditioning = ILU0
-  Linear System ILUT Tolerance = 1.0e-3
+  Linear System Preconditioning = ILU1
   Linear System Abort Not Converged = False
-  Linear System Residual Output = 10
-  Linear System Precondition Recompute = 1
+  Linear System Residual Output = 20
 End
 
+!--- Materials ---
+
+! Material 1: Silicon GPU Die
 Material 1
-  Name = "Silicon_GPU"
-  Density = 2330.0
-  Heat Capacity = 700.0
-  Heat Conductivity = 130.0
+  Name = "Silicon"
+  Density = Real 2330.0
+  Heat Capacity = Real 700.0
+  Heat Conductivity = Real 130.0
 End
 
+! Material 2: Thermal Interface Material (TIM)
 Material 2
-  Name = "TIM_Layer"
-  Density = 2500.0
-  Heat Capacity = 500.0
-  Heat Conductivity = 15.0
+  Name = "TIM"
+  Density = Real 2500.0
+  Heat Capacity = Real 500.0
+  Heat Conductivity = Real 15.0
 End
 
+! Material 3: Composite PCM Buffer (Hydra-Core)
 Material 3
-  Name = "Composite_PCM_Matrix"
-  Density = 1200.0
-  Heat Capacity = 1800.0
-  Heat Conductivity = 110.0
-  Phase Change Model = Spatial Temperature
-  Enthalpy = 220000.0
-  Phase Change Intervals = 64.0 66.0
+  Name = "Composite_PCM"
+  Density = Real 1200.0
+  Heat Capacity = Real 1800.0
+  Heat Conductivity = Real 110.0
 End
 
+! Material 4: Copper Cold Plate
 Material 4
-  Name = "Copper_ColdPlate"
-  Density = 8960.0
-  Heat Capacity = 385.0
-  Heat Conductivity = 400.0
+  Name = "Copper"
+  Density = Real 8960.0
+  Heat Capacity = Real 385.0
+  Heat Conductivity = Real 400.0
 End
 
+!--- Body Force: Volumetric Heat Source in GPU Die ---
+! Heat Source in Elmer is W/kg: Q_vol / rho = (8.764e8 W/m^3) / (2330 kg/m^3) = 3.761373e5 W/kg
 Body Force 1
-  Name = "Die_Volumetric_Heat_Source"
-  Heat Source = 2.12e9 ! W/m^3 Hotspot Peak Flux Density
+  Name = "GPU_Heat_Source"
+  Heat Source = Real 3.761373e5
 End
 
+!--- Boundary Conditions ---
+
+! BC 1: Top surface - Microchannel liquid cooling convection
 Boundary Condition 1
   Target Boundaries(1) = 1
-  Name = "Microchannel_Coolant_Convection"
-  Heat Transfer Coefficient = 35000.0
-  External Temperature = 25.0
+  Name = "Coolant_Top"
+  Heat Transfer Coefficient = Real 35000.0
+  External Temperature = Real 25.0
 End
 
+! BC 2: Bottom surface - Insulated (adiabatic)
 Boundary Condition 2
   Target Boundaries(1) = 2
-  Name = "Insulated_Package_Boundaries"
-  Heat Flux = 0.0
+  Name = "Bottom_Insulated"
+  Heat Flux = Real 0.0
+End
+
+! BC 3: Left side - Insulated (symmetry)
+Boundary Condition 3
+  Target Boundaries(1) = 3
+  Name = "Left_Side"
+  Heat Flux = Real 0.0
+End
+
+! BC 4: Right side - Insulated (symmetry)
+Boundary Condition 4
+  Target Boundaries(1) = 4
+  Name = "Right_Side"
+  Heat Flux = Real 0.0
 End
