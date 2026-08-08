@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hydra-Core: 3D Interactive Thermal Management Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Google Fonts & Chart.js / Three.js CDN -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header Navbar -->
+    <header class="navbar">
+      <div class="brand">
+        <span class="logo-icon">🔥</span>
+        <div>
+          <h1>HYDRA-CORE 3D</h1>
+          <p class="subtitle">AI Accelerator Package Thermal Visualizer & Solver Engine</p>
+        </div>
+      </div>
+      <div class="status-badge">
+        <span class="pulse-dot"></span>
+        <span>Elmer FEM & Python Solvers Active</span>
+      </div>
+    </header>
+
+    <!-- Main Grid Content -->
+    <main class="dashboard-grid">
+      <!-- 3D WebGL Canvas Viewport -->
+      <section class="card viewer-card">
+        <div class="card-header">
+          <h2>3D Interactive GPU Package Model (22,869 Nodes FEA)</h2>
+          <span class="hint">Rotate: Left-Click + Drag | Zoom: Scroll</span>
+        </div>
+        <div id="canvas-container"></div>
+        
+        <div class="layer-toggles">
+          <button class="btn btn-layer active" data-layer="die">Silicon Die (700W)</button>
+          <button class="btn btn-layer active" data-layer="tim">TIM-1 (15 W/mK)</button>
+          <button class="btn btn-layer active" data-layer="pcm">Composite PCM Buffer</button>
+          <button class="btn btn-layer active" data-layer="coldplate">Copper Cold Plate</button>
+        </div>
+      </section>
+
+      <!-- Sidebar Controls & Real-Time Stats -->
+      <aside class="sidebar">
+        <!-- Workload Controls -->
+        <div class="card control-card">
+          <h3>Simulation Parameters</h3>
+          
+          <div class="control-group">
+            <label for="power-slider">Power TDP: <span id="power-val">700</span> W</label>
+            <input type="range" id="power-slider" min="250" max="1000" step="25" value="700">
+          </div>
+
+          <div class="control-group">
+            <label for="workload-select">Workload Profile</label>
+            <select id="workload-select">
+              <option value="LLM_Inference">LLM Token Inference (Burst)</option>
+              <option value="CNN_Training" selected>CNN Matrix Training (700W Steady)</option>
+              <option value="B200_Peak">Blackwell B200 Peak (1000W Burst)</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label for="pcm-thick">PCM Buffer Thickness</label>
+            <select id="pcm-thick">
+              <option value="0.10">0.10 mm (Thin Matrix)</option>
+              <option value="0.20" selected>0.20 mm (Hydra-Core Optimal)</option>
+              <option value="0.30">0.30 mm (High Capacity)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Metric Telemetry Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-label">Peak Junction Temp</span>
+            <span class="metric-value" id="val-temp">53.52 °C</span>
+            <span class="metric-delta delta-good">-26.8 °C vs Baseline</span>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">TUI Heat Spreading</span>
+            <span class="metric-value" id="val-tui">3.8 °C</span>
+            <span class="metric-delta delta-good">48.6% Spreading Improv.</span>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Elmer FEM Delta</span>
+            <span class="metric-value" id="val-delta">2.05 °C</span>
+            <span class="metric-delta delta-neutral">3.6% FEM-FDM Error</span>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Burst Endurance</span>
+            <span class="metric-value" id="val-tbe">45.0 s</span>
+            <span class="metric-delta delta-good">+221% Endurance</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Transient Chart Section -->
+      <section class="card chart-card">
+        <div class="card-header">
+          <h2>Transient Temperature Step Response (Python FDM vs Elmer FEM)</h2>
+        </div>
+        <div class="chart-container">
+          <canvas id="tempChart"></canvas>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

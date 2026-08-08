@@ -1,0 +1,142 @@
+!------------------------------------------------------------------------------
+! ELMER FEM SOLVER INPUT FILE (case_3d.sif)
+! Hydra-Core: Full 3D Volumetric Thermal FEA Simulation of GPU Package Stack
+! 4-Layer 3D Domain: Silicon Die | TIM-1 | PCM Buffer | Copper Cold Plate
+! ------------------------------------------------------------------------------
+
+Header
+  CHECK KEYWORDS Warn
+  Mesh DB "." "elmer_mesh_3d"
+  Include Path ""
+  Results Directory "elmer_results"
+End
+
+Simulation
+  Max Output Level = 4
+  Coordinate System = Cartesian 3D
+  Coordinate Mapping(3) = 1 2 3
+  Simulation Type = Steady state
+  Steady State Max Iterations = 1
+  Output File = "case_3d.result"
+  Post File = "case_3d.vtu"
+End
+
+Constants
+  Stefan Boltzmann = 5.67e-08
+End
+
+!--- Bodies (4 layers in 3D) ---
+
+Body 1
+  Target Bodies(1) = 1
+  Name = "GPU_Die_3D"
+  Equation = 1
+  Material = 1
+  Body Force = 1
+End
+
+Body 2
+  Target Bodies(1) = 2
+  Name = "TIM_Layer_3D"
+  Equation = 1
+  Material = 2
+End
+
+Body 3
+  Target Bodies(1) = 3
+  Name = "PCM_Buffer_3D"
+  Equation = 1
+  Material = 3
+End
+
+Body 4
+  Target Bodies(1) = 4
+  Name = "Cold_Plate_3D"
+  Equation = 1
+  Material = 4
+End
+
+!--- Equation ---
+
+Equation 1
+  Name = "Heat_Equation_3D"
+  Active Solvers(1) = 1
+End
+
+!--- Solver: HeatSolve ---
+
+Solver 1
+  Equation = Heat Equation
+  Variable = Temperature
+  Procedure = "HeatSolve" "HeatSolver"
+  Exec Solver = Always
+  Stabilize = True
+  Optimize Bandwidth = True
+  Steady State Convergence Tolerance = 1.0e-5
+  Nonlinear System Convergence Tolerance = 1.0e-5
+  Nonlinear System Max Iterations = 20
+  Nonlinear System Newton After Iterations = 3
+  Nonlinear System Newton After Tolerance = 1.0e-3
+  Nonlinear System Relaxation Factor = 1.0
+  Linear System Solver = Iterative
+  Linear System Iterative Method = BiCGStabl
+  Linear System Max Iterations = 500
+  Linear System Convergence Tolerance = 1.0e-8
+  Linear System Preconditioning = ILU1
+  Linear System Abort Not Converged = False
+End
+
+!--- Materials ---
+
+Material 1
+  Name = "Silicon"
+  Density = Real 2330.0
+  Heat Capacity = Real 700.0
+  Heat Conductivity = Real 130.0
+End
+
+Material 2
+  Name = "TIM"
+  Density = Real 2500.0
+  Heat Capacity = Real 500.0
+  Heat Conductivity = Real 15.0
+End
+
+Material 3
+  Name = "Composite_PCM"
+  Density = Real 1200.0
+  Heat Capacity = Real 1800.0
+  Heat Conductivity = Real 110.0
+End
+
+Material 4
+  Name = "Copper"
+  Density = Real 8960.0
+  Heat Capacity = Real 385.0
+  Heat Conductivity = Real 400.0
+End
+
+!--- Body Force: 3D Volumetric Heat Source in GPU Die ---
+! Q_vol = 700 W / (0.032m * 0.032m * 0.00078m) = 8.764e8 W/m^3
+! In Elmer HeatSolve: Heat Source (W/kg) = Q_vol / rho = 8.764e8 / 2330 = 3.761373e5 W/kg
+Body Force 1
+  Name = "GPU_Heat_Source_3D"
+  Heat Source = Real 3.761373e5
+End
+
+!--- Boundary Conditions ---
+
+! BC 1: Top surface (z = z_max) - Microchannel liquid cooling convection
+Boundary Condition 1
+  Target Boundaries(1) = 1
+  Name = "Coolant_Top_3D"
+  Heat Transfer Coefficient = Real 35000.0
+  External Temperature = Real 25.0
+End
+
+! BC 2: Bottom surface (z = 0) - Insulated
+Boundary Condition 2
+  Target Boundaries(1) = 2
+  Name = "Bottom_Insulated_3D"
+  Heat Flux = Real 0.0
+End
