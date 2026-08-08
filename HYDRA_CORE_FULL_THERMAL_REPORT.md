@@ -1,7 +1,7 @@
 # HYDRA-CORE: Workload-Aware Phase Change Material Thermal Management Framework for Next-Generation AI Accelerators
 
 **Authors:** Advanced AI Hardware & Thermal Systems Group  
-**Status:** Verification & Independent FEM Cross-Validation Complete  
+**Status:** Verification & Independent FEA (Elmer FEM) Cross-Validation Complete  
 **Date:** August 8, 2026  
 **Repository:** [https://github.com/aashish-systems/hydra-core](https://github.com/aashish-systems/hydra-core)
 
@@ -75,7 +75,7 @@ To ensure the model avoids synthetic or linear numerical artifacts, an independe
 
 ### 2.2 Cross-Validation Results Summary
 
-The 2D FEA Elmer solver steady-state junction temperature under 700 W TDP full load was compared against the Python implicit 2D Finite Difference (FDM) engine and analytical thermal network models:
+The 2D FEA Elmer solver steady-state and transient junction temperature under 700 W TDP full load was compared against the Python implicit 2D Finite Difference (FDM) engine and analytical thermal network models:
 
 | Thermal Simulation Engine | Numerical Method | Peak Junction Temp ($T_{\text{max}}$) | Delta ($\Delta T$) | Status |
 | :--- | :--- | :--- | :--- | :--- |
@@ -88,9 +88,28 @@ The 2D FEA Elmer solver steady-state junction temperature under 700 W TDP full l
 
 ---
 
-## 3. Physical Performance & Metrics
+## 3. Visual Evidence & High-Definition Photo Results
 
-### 3.1 Peak Temperature & Thermal Uniformity Index (TUI)
+### 3.1 2D FEA Thermal Contour Field (Full GPU Package Stack)
+![Elmer 2D Thermal Contour](file:///C:/Users/Home/Downloads/PROJECTS/HYDRA-CORE/hydra-core/figures/elmer_thermal_contour_2d.png)
+
+### 3.2 Zoomed Die-TIM-PCM Interface & Spreading Zone
+![Die TIM PCM Interface Zoom](file:///C:/Users/Home/Downloads/PROJECTS/HYDRA-CORE/hydra-core/figures/elmer_die_pcm_interface_zoom.png)
+
+### 3.3 Transient Step Response Comparison (Elmer FEM vs Python FDM)
+![Elmer Transient Comparison](file:///C:/Users/Home/Downloads/PROJECTS/HYDRA-CORE/hydra-core/figures/elmer_transient_comparison.png)
+
+### 3.4 Cross-Validation Solver Agreement
+![Cross-Validation Comparison](file:///C:/Users/Home/Downloads/PROJECTS/HYDRA-CORE/hydra-core/figures/elmer_vs_python_cross_validation.png)
+
+### 3.5 Vertical & Lateral Thermal Gradient Profiles
+![Vertical & Lateral Thermal Profile](file:///C:/Users/Home/Downloads/PROJECTS/HYDRA-CORE/hydra-core/figures/elmer_thermal_profile_z.png)
+
+---
+
+## 4. Physical Performance & Metrics
+
+### 4.1 Peak Temperature & Thermal Uniformity Index (TUI)
 
 Under LLM Inference and CNN Training dynamic workload bursts:
 
@@ -104,26 +123,13 @@ $$\text{TUI} = \sigma(T) = \sqrt{\frac{1}{N} \sum_{i=1}^N (T_i - \bar{T})^2}$$
 
 ---
 
-### 3.2 Transient Burst Endurance (TBE)
+### 4.2 Transient Burst Endurance (TBE)
 
 Defined as the maximum continuous duration (seconds) the GPU can sustain at **700 W** power burst before exceeding thermal throttle limit ($85^\circ\text{C}$):
 
 - **Baseline (No PCM):** 14 seconds
 - **Uniform PCM:** 28 seconds
 - **Hydra-Core (Composite PCM):** **45 seconds (+221% endurance)**
-
----
-
-## 4. Visual Evidence & Artifacts
-
-### 4.1 2D FEA Thermal Contour Field (Elmer FEM)
-![Elmer 2D Thermal Contour](file:///C:/Users/Home/Downloads/PROJECTS/HYDRA-CORE/hydra-core/figures/elmer_thermal_contour_2d.png)
-
-### 4.2 Cross-Validation Solver Agreement
-![Cross-Validation Comparison](file:///C:/Users/Home/Downloads/PROJECTS/HYDRA-CORE/hydra-core/figures/elmer_vs_python_cross_validation.png)
-
-### 4.3 Vertical Thermal Gradient Across Package
-![Vertical Thermal Profile](file:///C:/Users/Home/Downloads/PROJECTS/HYDRA-CORE/hydra-core/figures/elmer_thermal_profile_z.png)
 
 ---
 
